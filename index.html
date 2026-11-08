@@ -2,33 +2,794 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PDF Reporte</title>
 <meta property="og:type" content="website">
 <meta property="og:title" content="PDF Reporte">
 <meta property="og:description" content="Toca para entrar al chat">
-<meta property="og:url" content="https://yeffreytavarez-droide.github.io/boton-chat/">
 <meta property="og:image" content="https://yeffreytavarez-droide.github.io/boton-chat/og.jpg">
 <meta property="og:image:width" content="630">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="apple-touch-icon" href="og.jpg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap">
 <style>
-:root{--bg:#0e1322;--tx:#9aa6b8}
-*{-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%}
-body{background:var(--bg);color:var(--tx);font-family:-apple-system,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;padding:16px;text-align:center}
-a{display:inline-block;transition:transform .15s}
-a:active{transform:scale(.94)}
-img{display:block;width:min(78vw,340px);height:auto;border-radius:24px}
-p{margin:16px 0 0;font-size:15px}
+:root {
+  color-scheme: light;
+  --bg: #E9EDF3;
+  --surface: #F7F9FC;
+  --ink: #17203A;
+  --muted: #56617E;
+  --line: #CBD3E2;
+  --mine: #2B4590;
+  --mine-ink: #FFFFFF;
+  --mine-meta: #D3DBF6;
+  --theirs: #FFFFFF;
+  --theirs-ink: #17203A;
+  --accent: #E8A317;
+  --danger: #B3261E;
+  --font-display: 'Bricolage Grotesque', ui-rounded, 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0E1322;
+    --surface: #161D31;
+    --ink: #E7EBF7;
+    --muted: #9AA6C4;
+    --line: #2A3453;
+    --mine: #4A66D8;
+    --mine-meta: #DCE3FA;
+    --theirs: #1C2540;
+    --theirs-ink: #E7EBF7;
+    --accent: #F2B73B;
+    --danger: #FF8A80;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.4;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+button, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+#app { height: 100%; display: flex; flex-direction: column; }
+.gutter {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.col { width: 100%; max-width: 720px; margin: 0 auto; }
+
+.top { flex: none; background: var(--surface); border-bottom: 1px solid var(--line); }
+.top-in { display: flex; align-items: center; gap: 14px; padding-block: 12px; }
+.seats { display: flex; flex: none; }
+.seat {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--line);
+}
+.seat + .seat { margin-left: -12px; }
+.seat svg { width: 22px; height: 22px; fill: currentColor; }
+.seat.me { background: var(--mine); color: var(--mine-ink); box-shadow: 0 0 0 2px var(--mine); }
+.seat.peer { background: var(--theirs); color: var(--theirs-ink); }
+.seat.empty { border: 2px dashed var(--muted); box-shadow: none; color: var(--muted); font-weight: 600; background: var(--bg); }
+.who { min-width: 0; flex: 1; }
+h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+#sub { margin: 2px 0 0; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+#share, #pinbtn {
+  flex: none;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secret { -webkit-text-security: disc; letter-spacing: .15em; }
+.pinform { display: grid; gap: 10px; margin-top: 4px; }
+.pinform input, .modal-card input {
+  width: 100%; background: var(--bg); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 14px; font: inherit; font-size: 18px; min-height: 46px;
+}
+.pinform .btn { margin-top: 0; }
+.btn.ghost { background: none; color: var(--ink); border: 1px solid var(--line); }
+.link { justify-self: start; background: none; border: 0; padding: 6px 0; color: var(--mine); font-weight: 600; cursor: pointer; text-decoration: underline; }
+.err { color: var(--danger) !important; font-weight: 600; }
+.modal { position: fixed; inset: 0; z-index: 30; background: rgba(8,12,24,.62); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
+.modal-card { width: 100%; max-width: 420px; }
+.row-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.row-btns .btn { margin-top: 0; }
+#gate { flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; padding-block: 28px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  display: grid;
+  gap: 10px;
+}
+.card h2 { font-family: var(--font-display); font-size: 21px; margin: 0; }
+.card p { margin: 0; color: var(--muted); max-width: 52ch; overflow-wrap: anywhere; }
+.btn {
+  justify-self: start;
+  margin-top: 6px;
+  background: var(--mine);
+  color: var(--mine-ink);
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:disabled { opacity: .6; cursor: default; }
+
+#chat { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.scrollwrap { position: relative; flex: 1; min-height: 0; }
+#scroll { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; }
+#list { padding-block: 14px; display: flex; flex-direction: column; gap: 10px; }
+.hint { text-align: center; color: var(--muted); margin: 40px 0 0; }
+.day {
+  align-self: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 0;
+  margin-top: 6px;
+}
+.row { display: flex; flex-direction: column; max-width: 100%; }
+.row.cont { margin-top: -6px; }
+.row.mine { align-items: flex-end; }
+.row.theirs { align-items: flex-start; }
+.bubble { max-width: 82%; padding: 8px 12px 6px; border-radius: 18px; overflow-wrap: anywhere; min-width: 0; }
+.mine .bubble { background: var(--mine); color: var(--mine-ink); border-bottom-right-radius: 6px; cursor: pointer; }
+.theirs .bubble { background: var(--theirs); color: var(--theirs-ink); border: 1px solid var(--line); border-bottom-left-radius: 6px; }
+.t { white-space: pre-wrap; display: block; }
+.meta { display: block; text-align: right; font-size: 11px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.mine .meta { color: var(--mine-meta); }
+.theirs .meta { color: var(--muted); }
+.actions { margin-top: 4px; }
+.del { background: none; border: 0; padding: 4px 2px; cursor: pointer; color: var(--danger); font-size: 13px; font-weight: 600; }
+#jump {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
+  background: var(--ink); color: var(--bg);
+  border: 0; border-radius: 999px; padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+
+#composer { flex: none; background: var(--surface); border-top: 1px solid var(--line); padding-block: 10px; }
+.compose-in { display: flex; align-items: flex-end; gap: 8px; }
+#msg {
+  flex: 1; min-width: 0; resize: none;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 11px 16px;
+  line-height: 1.35;
+  min-height: 44px;
+  max-height: 140px;
+}
+#msg::placeholder { color: var(--muted); }
+#send {
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  border: 0; background: var(--mine); color: var(--mine-ink);
+  display: grid; place-items: center; cursor: pointer;
+}
+#send:disabled { opacity: .45; cursor: default; }
+#send svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+#toast {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  background: var(--ink); color: var(--bg);
+  padding: 10px 16px; border-radius: 12px; font-size: 14px; max-width: calc(100% - 32px);
+  z-index: 20;
+}
 </style>
 </head>
 <body>
-<main>
-<a href="https://htmlpreview.github.io/?https://gist.githubusercontent.com/Yeffreytavarez-droide/b4cdc0356a968cf72338f4a7198b20fa/raw/2c313516c5d56a94f6306a3a82b438f9a7756ca5/PDF-reporte#sala=LVuwz5h6tWGo1N7HkNSko0tp"><img alt="Entrar al chat PDF Reporte" src="og.jpg"></a>
-<p>Toca para entrar al chat</p>
-</main>
-<script>setTimeout(function(){location.replace("https://htmlpreview.github.io/?https://gist.githubusercontent.com/Yeffreytavarez-droide/b4cdc0356a968cf72338f4a7198b20fa/raw/2c313516c5d56a94f6306a3a82b438f9a7756ca5/PDF-reporte#sala=LVuwz5h6tWGo1N7HkNSko0tp");},700);</script>
+<div id="app">
+  <header class="top">
+    <div class="top-in gutter col">
+      <div class="seats" id="seats" aria-hidden="true"></div>
+      <div class="who">
+        <h1>PDF Reporte</h1>
+        <p id="sub">Conectando…</p>
+      </div>
+      <button id="pinbtn" type="button" hidden>Crear PIN</button>
+      <button id="share" type="button" hidden>Invitar</button>
+    </div>
+  </header>
+
+  <section id="gate" class="gutter">
+    <div class="card col">
+      <h2 id="gate-title">Conectando…</h2>
+      <p id="gate-body">Estamos abriendo la sala.</p>
+      <button id="gate-btn" class="btn" type="button" hidden>Entrar al chat</button>
+      <button id="gate-alt" class="link" type="button" hidden>Ya estaba en esta sala (usar mi PIN)</button>
+      <form id="pin-form" class="pinform" hidden autocomplete="off">
+        <input id="pin-in" class="secret" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Tu PIN" aria-label="Tu PIN">
+        <button id="pin-go" class="btn" type="submit">Entrar con mi PIN</button>
+      </form>
+      <p id="gate-msg" class="err" hidden></p>
+    </div>
+  </section>
+
+  <section id="chat" hidden>
+    <div class="scrollwrap">
+      <div id="scroll">
+        <div id="list" class="gutter col" role="log" aria-live="polite"></div>
+      </div>
+      <button id="jump" type="button" hidden>Mensaje nuevo ↓</button>
+    </div>
+    <form id="composer" class="gutter" autocomplete="off">
+      <div class="compose-in col">
+        <textarea id="msg" rows="1" maxlength="4000" aria-label="Mensaje" placeholder="Escribe un mensaje"></textarea>
+        <button id="send" type="submit" aria-label="Enviar" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+        </button>
+      </div>
+    </form>
+  </section>
+</div>
+<div id="pinmodal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="pm-title">
+  <form id="pm-form" class="card modal-card" autocomplete="off">
+    <h2 id="pm-title">Crea tu PIN</h2>
+    <p>Sirve para recuperar tu lugar si cambias de teléfono o se borra el navegador. De 6 a 12 números. Anótalo: nadie puede recuperarlo por ti.</p>
+    <input id="pm-in" class="secret" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Tu PIN" aria-label="Tu PIN">
+    <input id="pm-in2" class="secret" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Repite tu PIN" aria-label="Repite tu PIN">
+    <p id="pm-err" class="err" hidden></p>
+    <div class="row-btns">
+      <button id="pm-save" class="btn" type="submit">Guardar PIN</button>
+      <button id="pm-skip" class="btn ghost" type="button">Ahora no</button>
+    </div>
+  </form>
+</div>
+<div id="toast" role="status" hidden></div>
+
+<script>
+/* ============================================================
+   PEGA AQUÍ LA CONFIGURACIÓN DE TU PROYECTO DE FIREBASE
+   (Configuración del proyecto > Tus apps > Configuración de SDK)
+   Reemplaza cada PEGA_AQUI por el valor que te muestra Firebase.
+   ============================================================ */
+var firebaseConfig = {
+  apiKey: "AIzaSyAZFyThKGBVkrv9iiA9B45zt1-UAiF0YLk",
+  authDomain: "pdf-proyecto-5f729.firebaseapp.com",
+  projectId: "pdf-proyecto-5f729",
+  storageBucket: "pdf-proyecto-5f729.firebasestorage.app",
+  messagingSenderId: "982398163866",
+  appId: "1:982398163866:web:611abe8332de802a107823"
+};
+
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var els = {
+    sub: $('sub'), seats: $('seats'), share: $('share'), gate: $('gate'), gateTitle: $('gate-title'),
+    gateBody: $('gate-body'), gateBtn: $('gate-btn'), chat: $('chat'), scroll: $('scroll'),
+    list: $('list'), form: $('composer'), ta: $('msg'), send: $('send'), toast: $('toast'), jump: $('jump'),
+    pinbtn: $('pinbtn'), gateAlt: $('gate-alt'), pinForm: $('pin-form'), pinIn: $('pin-in'), pinGo: $('pin-go'),
+    gateMsg: $('gate-msg'), pm: $('pinmodal'), pmForm: $('pm-form'), pmIn: $('pm-in'), pmIn2: $('pm-in2'),
+    pmErr: $('pm-err'), pmSave: $('pm-save'), pmSkip: $('pm-skip')
+  };
+
+  var fs = null, auth = null, uid = null, roomId = null, roomRef = null, gateAction = 'join';
+  var seats = null;           /* null = la sala no existe todavía */
+  var seatsReady = false, joining = false, sending = false;
+  var unsubRoom = null, unsubMsgs = null;
+  var msgs = [], msgsLoaded = false, msgsSlow = false, rendered = false, lastId = null;
+  var selectedId = null, confirmId = null, toastTimer = null, pinPrompted = false;
+
+  var fmtTime = new Intl.DateTimeFormat('es', { hour: 'numeric', minute: '2-digit' });
+  var fmtDay = new Intl.DateTimeFormat('es', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  function dayKey(ts) { return new Date(ts).toDateString(); }
+  function dayLabel(ts) {
+    var d = new Date(ts), t = new Date(), y = new Date();
+    y.setDate(t.getDate() - 1);
+    if (d.toDateString() === t.toDateString()) return 'Hoy';
+    if (d.toDateString() === y.toDateString()) return 'Ayer';
+    return fmtDay.format(d);
+  }
+  function toast(text) {
+    els.toast.textContent = text;
+    els.toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { els.toast.hidden = true; }, 4500);
+  }
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  /* ---------- Sala en el enlace ---------- */
+  function roomFromHash() {
+    var m = /^#sala=([A-Za-z0-9_-]{16,64})$/.exec(location.hash);
+    return m ? m[1] : null;
+  }
+  function newRoomId() {
+    var a = new Uint8Array(18), s = '', i;
+    crypto.getRandomValues(a);
+    for (i = 0; i < a.length; i++) s += String.fromCharCode(a[i]);
+    return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function useRoom(id) {
+    roomId = id;
+    roomRef = fs.collection('rooms').doc(id);
+    try { history.replaceState(null, '', '#sala=' + id); } catch (e) { location.hash = 'sala=' + id; }
+    store('pdfreporte.sala', id);
+  }
+
+  /* ---------- Pantallas ---------- */
+  function showGate(kind, detail) {
+    els.chat.hidden = true;
+    els.gate.hidden = false;
+    els.gateBtn.hidden = true;
+    els.share.hidden = true;
+    els.pinbtn.hidden = true;
+    els.pm.hidden = true;
+    els.gateAlt.hidden = true;
+    els.pinForm.hidden = true;
+    els.pinIn.value = '';
+    setErr(els.gateMsg, '');
+    var t, b;
+    if (kind === 'loading') { t = 'Conectando…'; b = 'Estamos abriendo la sala.'; }
+    else if (kind === 'config') { t = 'Falta la configuración'; b = 'Abre el archivo y pega los datos de tu proyecto de Firebase donde dice PEGA_AQUI.'; }
+    else if (kind === 'start') {
+      t = 'Crear una sala privada';
+      b = 'Se crea un enlace único. Cuando entre la segunda persona, la sala se cierra y nadie más puede entrar.';
+      gateAction = 'create';
+      els.gateBtn.hidden = false; els.gateBtn.disabled = false; els.gateBtn.textContent = 'Crear sala';
+    }
+    else if (kind === 'join') {
+      t = 'Sala privada para dos';
+      b = 'Cuando entres, la sala se cierra y nadie más podrá entrar.';
+      gateAction = 'join';
+      els.gateBtn.hidden = false; els.gateBtn.disabled = false; els.gateBtn.textContent = 'Entrar al chat';
+      els.gateAlt.hidden = false;
+    }
+    else if (kind === 'full') {
+      t = 'Sala completa';
+      b = 'Esta sala ya tiene a sus dos personas. Si eres una de ellas y cambiaste de teléfono o de navegador, escribe tu PIN para volver a entrar.';
+      els.pinForm.hidden = false;
+    }
+    else if (kind === 'denied') {
+      t = 'No eres parte de esta sala';
+      b = 'No pudimos verificar tu sesión. Si ya habías entrado antes, escribe tu PIN. Si es la primera vez que la abres, avisa a quien te envió el enlace.';
+      els.pinForm.hidden = false;
+    }
+    else if (kind === 'auth') { t = 'No se pudo iniciar'; b = 'En Firebase, activa el inicio de sesión anónimo (Authentication > Método de acceso > Anónimo).'; }
+    else if (kind === 'rules') { t = 'Falta publicar las reglas'; b = 'Pega las reglas de seguridad en Firestore y pulsa Publicar. Luego recarga esta página.'; }
+    else { t = 'No se pudo abrir el chat'; b = 'Algo falló al conectar. Revisa tu conexión y vuelve a abrir el enlace.' + (detail ? ' (' + detail + ')' : ''); }
+    els.gateTitle.textContent = t;
+    els.gateBody.textContent = b;
+  }
+
+  function setErr(el, msg) { el.textContent = msg || ''; el.hidden = !msg; }
+
+  /* ---------- PIN de recuperación ---------- */
+  var PIN_RE = /^[0-9]{6,12}$/;
+  function hasPin() {
+    var u = auth && auth.currentUser;
+    return !!u && u.providerData.some(function (p) { return p.providerId === 'password'; });
+  }
+  async function sha(str) {
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(function (x) { return x.toString(16).padStart(2, '0'); }).join('');
+  }
+  async function pinCreds(seat, pin) {
+    var email = (await sha('e:' + roomId + ':' + seat)).slice(0, 32) + '@pdfreporte.invalid';
+    var pass = await sha('p:' + roomId + ':' + seat + ':' + pin);
+    return { email: email, pass: pass };
+  }
+  function recentSkip() {
+    var t = Number(load('pdfreporte.pinskip') || 0);
+    return t && Date.now() - t < 3 * 86400000;
+  }
+  function openPinModal() {
+    els.pmIn.value = ''; els.pmIn2.value = ''; setErr(els.pmErr, '');
+    els.pm.hidden = false;
+    setTimeout(function () { els.pmIn.focus(); }, 60);
+  }
+  els.pinbtn.addEventListener('click', openPinModal);
+  els.pmSkip.addEventListener('click', function () {
+    store('pdfreporte.pinskip', String(Date.now()));
+    els.pm.hidden = true;
+  });
+  els.pmForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var p = els.pmIn.value.trim(), p2 = els.pmIn2.value.trim();
+    if (!PIN_RE.test(p)) { setErr(els.pmErr, 'El PIN debe tener de 6 a 12 números.'); return; }
+    if (p !== p2) { setErr(els.pmErr, 'Los dos PIN no coinciden.'); return; }
+    if (!isMember() || !auth.currentUser) { setErr(els.pmErr, 'Primero debes estar dentro de la sala.'); return; }
+    els.pmSave.disabled = true;
+    setErr(els.pmErr, '');
+    try {
+      var c = await pinCreds(seats.a === uid ? 'a' : 'b', p);
+      await auth.currentUser.linkWithCredential(firebase.auth.EmailAuthProvider.credential(c.email, c.pass));
+      els.pm.hidden = true;
+      updateHeader();
+      toast('PIN guardado. Anótalo: sin él no se puede recuperar tu lugar.');
+    } catch (err) {
+      var code = err && err.code || '';
+      if (code === 'auth/operation-not-allowed') setErr(els.pmErr, 'Falta activar Email/contraseña en Firebase (Authentication > Método de acceso).');
+      else if (code === 'auth/provider-already-linked') { els.pm.hidden = true; updateHeader(); toast('Ya tienes un PIN guardado.'); }
+      else if (code === 'auth/email-already-in-use' || code === 'auth/credential-already-in-use') setErr(els.pmErr, 'Ese lugar ya tiene un PIN guardado.');
+      else if (code === 'auth/network-request-failed') setErr(els.pmErr, 'Sin conexión. Inténtalo otra vez.');
+      else setErr(els.pmErr, 'No se pudo guardar el PIN. Inténtalo otra vez.');
+    }
+    els.pmSave.disabled = false;
+  });
+  els.gateAlt.addEventListener('click', function () {
+    els.pinForm.hidden = !els.pinForm.hidden;
+    if (!els.pinForm.hidden) els.pinIn.focus();
+  });
+  els.pinForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var p = els.pinIn.value.trim();
+    if (!PIN_RE.test(p)) { setErr(els.gateMsg, 'Escribe tu PIN (6 a 12 números).'); return; }
+    els.pinGo.disabled = true;
+    els.pinGo.textContent = 'Verificando…';
+    setErr(els.gateMsg, '');
+    var ok = false, fatal = '', seatsToTry = ['a', 'b'], i;
+    for (i = 0; i < seatsToTry.length && !ok; i++) {
+      try {
+        var c = await pinCreds(seatsToTry[i], p);
+        var cred = await auth.signInWithEmailAndPassword(c.email, c.pass);
+        uid = cred.user.uid;
+        ok = true;
+      } catch (err) {
+        var code = err && err.code || '';
+        if (code === 'auth/too-many-requests') { fatal = 'Demasiados intentos. Espera unos minutos e inténtalo otra vez.'; break; }
+        if (code === 'auth/operation-not-allowed') { fatal = 'Falta activar Email/contraseña en Firebase.'; break; }
+        if (code === 'auth/network-request-failed') { fatal = 'Sin conexión. Inténtalo otra vez.'; break; }
+      }
+    }
+    els.pinGo.disabled = false;
+    els.pinGo.textContent = 'Entrar con mi PIN';
+    if (ok) {
+      route();
+      if (!isMember()) setErr(els.gateMsg, 'Ese PIN no corresponde a esta sala.');
+      else toast('Listo, volviste a tu lugar.');
+      return;
+    }
+    setErr(els.gateMsg, fatal || 'PIN incorrecto, o ese lugar no tiene un PIN guardado.');
+  });
+
+  function personIcon() {
+    var ns = 'http://www.w3.org/2000/svg';
+    var s = document.createElementNS(ns, 'svg');
+    s.setAttribute('viewBox', '0 0 24 24');
+    var c = document.createElementNS(ns, 'circle');
+    c.setAttribute('cx', '12'); c.setAttribute('cy', '8'); c.setAttribute('r', '4');
+    var p = document.createElementNS(ns, 'path');
+    p.setAttribute('d', 'M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z');
+    s.appendChild(c); s.appendChild(p);
+    return s;
+  }
+  function seatEl(kind) {
+    var d = document.createElement('div');
+    d.className = 'seat ' + kind;
+    if (kind === 'empty') d.textContent = '+'; else d.appendChild(personIcon());
+    return d;
+  }
+  function isMember() { return !!seats && (seats.a === uid || seats.b === uid); }
+  function updateHeader() {
+    var member = isMember();
+    var both = !!seats && !!seats.a && !!seats.b;
+    if (member) els.seats.replaceChildren(seatEl(both ? 'peer' : 'empty'), seatEl('me'));
+    else els.seats.replaceChildren(seatEl(seats && seats.a ? 'peer' : 'empty'), seatEl(both ? 'peer' : 'empty'));
+    var text;
+    if (member && both) text = 'Sala cerrada · 2 de 2';
+    else if (member) text = 'Esperando a la otra persona · 1 de 2 lugares';
+    else if (both) text = 'Sala cerrada · 2 de 2';
+    else text = 'Sala privada de 2 personas';
+    els.sub.textContent = text;
+    els.share.hidden = !(member && !both);
+    els.pinbtn.hidden = !(member && !hasPin());
+  }
+
+  /* ---------- Lugares de la sala ---------- */
+  async function claim() {
+    try {
+      var s = await roomRef.get({ source: 'server' });
+      if (!s.exists) { await roomRef.set({ a: uid, b: null }); return 'ok'; }
+      var d = s.data();
+      if (d.a === uid || d.b === uid) return 'ok';
+      if (d.b) return 'full';
+      await roomRef.update({ b: uid });
+      return 'ok';
+    } catch (e) {
+      return e && e.code === 'permission-denied' ? 'full' : 'error:' + (e && e.code || '');
+    }
+  }
+  els.gateBtn.addEventListener('click', async function () {
+    if (joining) return;
+    joining = true;
+    els.gateBtn.disabled = true;
+    els.gateBtn.textContent = 'Entrando…';
+    if (gateAction === 'create') useRoom(newRoomId());
+    var res = await claim();
+    joining = false;
+    if (res === 'ok') {
+      if (gateAction === 'create') openRoom();
+      else route();
+      return;
+    }
+    if (res === 'full') { showGate('full'); return; }
+    showGate(gateAction === 'create' ? 'start' : 'join');
+    toast('No se pudo entrar. Inténtalo de nuevo.');
+  });
+
+  function route() {
+    if (!seatsReady) return;
+    updateHeader();
+    if (isMember()) {
+      els.gate.hidden = true;
+      els.chat.hidden = false;
+      autosize();
+      startMsgs();
+      if (!hasPin() && !pinPrompted && !recentSkip()) { pinPrompted = true; openPinModal(); }
+      return;
+    }
+    if (joining) return;
+    if (seats && seats.a && seats.b) showGate('full'); else showGate('join');
+  }
+
+  function openRoom() {
+    if (unsubRoom) return;
+    var slow = setTimeout(function () { if (!seatsReady) showGate('error', 'sin respuesta'); }, 12000);
+    unsubRoom = roomRef.onSnapshot(function (s) {
+      var d = s.exists ? (s.data() || {}) : null;
+      var next = d ? { a: d.a || null, b: d.b || null } : null;
+      var member = !!next && (next.a === uid || next.b === uid);
+      if (s.metadata.fromCache && !member && !seatsReady) return;
+      seats = next;
+      seatsReady = true;
+      clearTimeout(slow);
+      route();
+    }, function (e) {
+      clearTimeout(slow);
+      showGate(e && e.code === 'permission-denied' ? 'denied' : 'error', e && e.code);
+    });
+  }
+
+  /* ---------- Invitar ---------- */
+  els.share.addEventListener('click', async function () {
+    var url = location.href;
+    try {
+      if (navigator.share) { await navigator.share({ title: 'PDF Reporte', url: url }); return; }
+    } catch (e) { if (e && e.name === 'AbortError') return; }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast('Enlace copiado. Envíaselo solo a la otra persona.');
+    } catch (e) {
+      toast('Copia el enlace de la barra de direcciones y envíaselo a la otra persona.');
+    }
+  });
+
+  /* ---------- Mensajes ---------- */
+  function startMsgs() {
+    if (unsubMsgs) return;
+    var slow = setTimeout(function () { if (!msgsLoaded) { msgsSlow = true; renderMsgs(); } }, 10000);
+    unsubMsgs = roomRef.collection('messages').orderBy('ts', 'desc').limit(200).onSnapshot(function (snap) {
+      msgsLoaded = true;
+      clearTimeout(slow);
+      msgs = snap.docs.map(function (d) {
+        var o = d.data({ serverTimestamps: 'estimate' }) || {};
+        var ts = o.ts && typeof o.ts.toMillis === 'function' ? o.ts.toMillis() : Date.now();
+        return { id: d.id, from: o.from, text: o.text, ts: ts };
+      }).filter(function (m) { return typeof m.text === 'string' && typeof m.from === 'string'; }).reverse();
+      renderMsgs();
+    }, function () {
+      clearTimeout(slow);
+      msgsSlow = true;
+      renderMsgs();
+    });
+    renderMsgs();
+  }
+
+  function toBottom() {
+    els.scroll.scrollTop = els.scroll.scrollHeight;
+    els.jump.hidden = true;
+  }
+
+  function renderMsgs() {
+    var sc = els.scroll;
+    var near = sc.scrollHeight - sc.scrollTop - sc.clientHeight < 140;
+    var last = msgs[msgs.length - 1];
+    var newLast = !!last && last.id !== lastId;
+    var first = !rendered;
+    var frag = document.createDocumentFragment();
+
+    if (!msgs.length) {
+      var p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = msgsLoaded
+        ? 'Aquí aparecerán sus mensajes. Escribe el primero.'
+        : (msgsSlow ? 'Los mensajes tardan en llegar. Seguimos intentando.' : 'Cargando mensajes…');
+      frag.appendChild(p);
+    }
+
+    var prev = null;
+    msgs.forEach(function (m) {
+      var newDay = !prev || dayKey(prev.ts) !== dayKey(m.ts);
+      if (newDay) {
+        var dd = document.createElement('div');
+        dd.className = 'day';
+        dd.textContent = dayLabel(m.ts);
+        frag.appendChild(dd);
+      }
+      var mine = m.from === uid;
+      var cont = prev && !newDay && prev.from === m.from && (m.ts - prev.ts) < 300000;
+      var row = document.createElement('div');
+      row.className = 'row ' + (mine ? 'mine' : 'theirs') + (cont ? ' cont' : '');
+      row.dataset.id = m.id;
+      var b = document.createElement('div');
+      b.className = 'bubble';
+      if (mine) { b.tabIndex = 0; b.setAttribute('role', 'button'); b.setAttribute('aria-expanded', selectedId === m.id ? 'true' : 'false'); }
+      var t = document.createElement('span');
+      t.className = 't';
+      t.textContent = m.text;
+      var meta = document.createElement('span');
+      meta.className = 'meta';
+      meta.textContent = fmtTime.format(new Date(m.ts));
+      b.appendChild(t);
+      b.appendChild(meta);
+      row.appendChild(b);
+      if (mine && selectedId === m.id) {
+        var act = document.createElement('div');
+        act.className = 'actions';
+        var del = document.createElement('button');
+        del.type = 'button';
+        del.className = 'del';
+        del.textContent = confirmId === m.id ? 'Confirmar eliminación' : 'Eliminar';
+        act.appendChild(del);
+        row.appendChild(act);
+      }
+      frag.appendChild(row);
+      prev = m;
+    });
+
+    els.list.replaceChildren(frag);
+    rendered = true;
+    if (first || near || (newLast && last.from === uid)) toBottom();
+    else if (newLast) els.jump.hidden = false;
+    lastId = last ? last.id : null;
+  }
+
+  els.list.addEventListener('click', function (e) {
+    var row = e.target.closest('.row');
+    if (!row) return;
+    var id = row.dataset.id;
+    if (e.target.closest('.del')) {
+      if (confirmId !== id) { confirmId = id; renderMsgs(); return; }
+      selectedId = null; confirmId = null;
+      roomRef.collection('messages').doc(id).delete().catch(function () { toast('No se pudo eliminar el mensaje.'); });
+      return;
+    }
+    if (!row.classList.contains('mine')) return;
+    selectedId = selectedId === id ? null : id;
+    confirmId = null;
+    renderMsgs();
+  });
+  els.list.addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('bubble')) {
+      e.preventDefault();
+      e.target.click();
+    }
+  });
+  els.scroll.addEventListener('scroll', function () {
+    var sc = els.scroll;
+    if (sc.scrollHeight - sc.scrollTop - sc.clientHeight < 140) els.jump.hidden = true;
+  });
+  els.jump.addEventListener('click', toBottom);
+
+  /* ---------- Redactor ---------- */
+  function autosize() {
+    els.ta.style.height = 'auto';
+    var h = els.ta.scrollHeight;
+    if (h > 0) els.ta.style.height = Math.min(h, 140) + 'px';
+    els.send.disabled = sending || !els.ta.value.trim();
+  }
+  els.ta.addEventListener('input', autosize);
+  els.ta.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && window.matchMedia('(pointer: fine)').matches) {
+      e.preventDefault();
+      els.form.requestSubmit();
+    }
+  });
+  els.form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var text = els.ta.value.trim();
+    if (!text || sending || !roomRef || !uid) return;
+    sending = true;
+    els.ta.value = '';
+    autosize();
+    try {
+      await roomRef.collection('messages').add({
+        from: uid,
+        text: text,
+        ts: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch (err) {
+      if (!els.ta.value) els.ta.value = text;
+      toast('El mensaje no se envió. Revisa tu conexión e inténtalo otra vez.');
+    }
+    sending = false;
+    autosize();
+    els.ta.focus();
+  });
+
+  /* ---------- Arranque ---------- */
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = function () { resolve(); };
+      s.onerror = function () { reject(new Error('no cargó ' + src.split('/').pop())); };
+      document.head.appendChild(s);
+    });
+  }
+  async function loadFirebase() {
+    if (typeof firebase !== 'undefined' && firebase.auth && firebase.firestore) return;
+    var base = 'https://www.gstatic.com/firebasejs/10.12.2/';
+    await loadScript(base + 'firebase-app-compat.js');
+    await loadScript(base + 'firebase-auth-compat.js');
+    await loadScript(base + 'firebase-firestore-compat.js');
+  }
+
+  async function boot() {
+    showGate('loading');
+    try { await loadFirebase(); } catch (e) { showGate('error', e && e.message ? e.message : 'no cargó Firebase'); return; }
+    if (typeof firebase === 'undefined') { showGate('error', 'no cargó Firebase'); return; }
+    if (!firebaseConfig.apiKey || /PEGA_AQUI/.test(firebaseConfig.apiKey) || /PEGA_AQUI/.test(firebaseConfig.projectId)) {
+      showGate('config');
+      return;
+    }
+    try {
+      firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      fs = firebase.firestore();
+      uid = await new Promise(function (res) {
+        var off = auth.onAuthStateChanged(function (u) { off(); res(u ? u.uid : null); });
+      });
+      if (!uid) {
+        var cred = await auth.signInAnonymously();
+        uid = cred.user.uid;
+      }
+    } catch (e) {
+      showGate('auth');
+      return;
+    }
+    var id = roomFromHash() || load('pdfreporte.sala');
+    if (!id || !/^[A-Za-z0-9_-]{16,64}$/.test(id)) { showGate('start'); autosize(); return; }
+    useRoom(id);
+    openRoom();
+    autosize();
+  }
+  boot();
+})();
+</script>
 </body>
 </html>
