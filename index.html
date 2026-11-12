@@ -6,7 +6,7 @@
 <title>PDF Reporte</title>
 <meta property="og:type" content="website">
 <meta property="og:title" content="PDF Reporte">
-<meta property="og:description" content="Toca para entrar al chat">
+<meta property="og:description" content="Herramientas PDF en línea">
 <meta property="og:image" content="https://yeffreytavarez-droide.github.io/boton-chat/og.jpg">
 <meta property="og:image:width" content="630">
 <meta property="og:image:height" content="630">
@@ -179,7 +179,7 @@ h1 {
 }
 
 #composer { flex: none; background: var(--surface); border-top: 1px solid var(--line); padding-block: 10px; }
-.compose-in { display: flex; align-items: flex-end; gap: 8px; }
+.compose-in { display: flex; align-items: flex-end; gap: 6px; }
 #msg {
   flex: 1; min-width: 0; resize: none;
   background: var(--bg);
@@ -199,6 +199,44 @@ h1 {
 #send:disabled { opacity: .45; cursor: default; }
 #send svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
+.icon { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); color: var(--muted); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.icon[aria-pressed="true"] { color: var(--mine); border-color: var(--mine); }
+.emojis { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; max-height: 168px; overflow-y: auto; padding-bottom: 8px; }
+.emojis button { background: none; border: 0; font-size: 26px; line-height: 1; padding: 6px 0; cursor: pointer; border-radius: 10px; }
+.emojis button:active { background: var(--line); }
+.preview { position: relative; display: flex; align-items: center; padding-bottom: 8px; }
+.preview img { height: 84px; max-width: 60%; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); }
+.preview button { margin-left: 8px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
+.pic { display: block; max-width: 100%; max-height: 320px; border-radius: 12px; margin: 2px 0 4px; cursor: zoom-in; }
+#lightbox { cursor: zoom-out; padding: 8px; }
+#lightbox img { max-width: 100%; max-height: 100%; border-radius: 8px; }
+#cover { min-height: 100%; background: var(--bg); }
+.cv-top { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+.cv-in { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-block: 12px; }
+.cv-logo { display: flex; align-items: center; gap: 10px; background: none; border: 0; padding: 0; cursor: pointer; font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--ink); }
+.cv-logo svg { width: 30px; height: 30px; }
+.cv-search { display: flex; flex: 1 1 260px; gap: 8px; min-width: 0; }
+.cv-search input { flex: 1; min-width: 0; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font: inherit; min-height: 44px; }
+.cv-search button { flex: none; background: var(--mine); color: var(--mine-ink); border: 0; border-radius: 12px; padding: 0 18px; font-weight: 600; cursor: pointer; min-height: 44px; }
+.cv-hero { padding-block: 28px 8px; }
+.cv-hero h2 { font-family: var(--font-display); font-size: 28px; line-height: 1.1; margin: 0 0 6px; letter-spacing: -0.01em; }
+.cv-hero p { margin: 0; color: var(--muted); max-width: 52ch; }
+.tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; padding-block: 18px; }
+.tool { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; cursor: pointer; display: grid; gap: 8px; }
+.tool:active { transform: scale(.98); }
+.tool .ti { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--ink); }
+.tool .ti svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tool b { font-family: var(--font-display); font-size: 16px; }
+.tool span { color: var(--muted); font-size: 13px; }
+.tool em { font-style: normal; font-size: 11px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; justify-self: start; }
+.noresult { padding: 24px 0; color: var(--muted); }
+.maker { margin-bottom: 40px; }
+.maker .thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.maker .thumbs div { position: relative; }
+.maker .thumbs img { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); display: block; }
+.maker .thumbs button { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 12px; cursor: pointer; padding: 0; }
+.maker .row-btns .btn { margin-top: 0; }
 #toast {
   position: fixed; left: 50%; transform: translateX(-50%);
   bottom: calc(84px + env(safe-area-inset-bottom, 0px));
@@ -209,12 +247,45 @@ h1 {
 </style>
 </head>
 <body>
-<div id="app">
+<div id="cover">
+  <header class="cv-top gutter">
+    <div class="cv-in col">
+      <button id="cv-logo" class="cv-logo" type="button" aria-label="Inicio">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 3h13l7 7v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="#E5322D"/><path d="M20 3v7h7" fill="#00000033"/><text x="16" y="23" font-size="8.5" font-weight="800" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif">PDF</text></svg>
+        <span>PDF Reporte</span>
+      </button>
+      <form id="cv-search" class="cv-search" role="search" autocomplete="off">
+        <input id="cv-q" name="q" type="search" placeholder="Buscar herramienta…" aria-label="Buscar herramienta" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search">
+        <button type="submit">Buscar</button>
+      </form>
+    </div>
+  </header>
+  <main class="gutter">
+    <section class="cv-hero col">
+      <h2>Todo para tus PDF, en un solo lugar</h2>
+      <p>Crea, une y ordena tus documentos desde el teléfono. Tus archivos se procesan en tu dispositivo y no se envían a ningún servidor.</p>
+    </section>
+    <section id="tools" class="tools col" aria-label="Herramientas"></section>
+    <p id="noresult" class="noresult col" hidden></p>
+    <section id="maker" class="card col maker" hidden>
+      <h2>Fotos a PDF</h2>
+      <p>Elige una o varias fotos y las convertimos en un solo documento PDF, una por página.</p>
+      <div id="thumbs" class="thumbs"></div>
+      <div class="row-btns">
+        <button id="mk-pick" class="btn ghost" type="button">Elegir fotos</button>
+        <button id="mk-go" class="btn" type="button" disabled>Crear PDF</button>
+        <button id="mk-close" class="btn ghost" type="button">Cerrar</button>
+      </div>
+      <input id="mk-file" type="file" accept="image/*" multiple hidden>
+    </section>
+  </main>
+</div>
+<div id="app" hidden>
   <header class="top">
     <div class="top-in gutter col">
       <div class="seats" id="seats" aria-hidden="true"></div>
       <div class="who">
-        <h1>PDF Reporte</h1>
+        <h1 id="who-title" style="cursor:pointer">PDF Reporte</h1>
         <p id="sub">Conectando…</p>
       </div>
       <button id="pinbtn" type="button" hidden>Crear PIN</button>
@@ -244,15 +315,28 @@ h1 {
       <button id="jump" type="button" hidden>Mensaje nuevo ↓</button>
     </div>
     <form id="composer" class="gutter" autocomplete="off">
+      <div id="emojis" class="emojis col" hidden></div>
+      <div id="preview" class="preview col" hidden>
+        <img id="pv-img" alt="Foto lista para enviar">
+        <button id="pv-x" type="button" aria-label="Quitar foto">✕</button>
+      </div>
       <div class="compose-in col">
+        <button id="btn-photo" class="icon" type="button" aria-label="Enviar una foto">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.2" r="3.4"/></svg>
+        </button>
+        <button id="btn-emoji" class="icon" type="button" aria-label="Emojis" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.2c.9 1.3 2 1.9 3.5 1.9s2.6-.6 3.5-1.9"/><path d="M9 9.6h.01M15 9.6h.01"/></svg>
+        </button>
         <textarea id="msg" rows="1" maxlength="4000" aria-label="Mensaje" placeholder="Escribe un mensaje"></textarea>
         <button id="send" type="submit" aria-label="Enviar" disabled>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
         </button>
       </div>
+      <input id="file" type="file" accept="image/*" hidden>
     </form>
   </section>
 </div>
+<div id="lightbox" class="modal" hidden role="dialog" aria-label="Foto ampliada"><img id="lb-img" alt="Foto"></div>
 <div id="pinmodal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="pm-title">
   <form id="pm-form" class="card modal-card" autocomplete="off">
     <h2 id="pm-title">Crea tu PIN</h2>
@@ -268,6 +352,181 @@ h1 {
 </div>
 <div id="toast" role="status" hidden></div>
 
+<script>
+(function () {
+  'use strict';
+  var GATE = { salt: '5c1c74163704ccf1220ab35819e7489b', hash: '39e435775d700ccecfdcec7a4afac4a8bbba087eec39dbfedd0f96002abcc016', iter: 150000 };
+  var $ = function (id) { return document.getElementById(id); };
+  var enc = new TextEncoder();
+  var hiddenAt = 0, unlocked = false, tt = null;
+  function note(text) {
+    var t = $('toast'); t.textContent = text; t.hidden = false;
+    clearTimeout(tt); tt = setTimeout(function () { t.hidden = true; }, 3500);
+  }
+  function hex2bytes(h) { var a = new Uint8Array(h.length / 2), i; for (i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16); return a; }
+  function bytes2hex(b) { return Array.from(new Uint8Array(b)).map(function (x) { return x.toString(16).padStart(2, '0'); }).join(''); }
+  async function derive(pw) {
+    var key = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveBits']);
+    var bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: hex2bytes(GATE.salt), iterations: GATE.iter, hash: 'SHA-256' }, key, 256);
+    return bytes2hex(bits);
+  }
+
+  /* ----- herramientas (tarjetas) ----- */
+  var ico = {
+    img: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg>',
+    merge: '<svg viewBox="0 0 24 24"><path d="M7 4h6l4 4v6"/><path d="M5 8v12h10"/><path d="M9 14h4"/></svg>',
+    split: '<svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l-2 4 2 4"/><path d="M19 8l2 4-2 4"/></svg>',
+    zip: '<svg viewBox="0 0 24 24"><path d="M4 8l8-5 8 5v8l-8 5-8-5z"/><path d="M12 3v18"/></svg>',
+    sign: '<svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M5 16c3-8 5-9 6-7s-1 6 1 6 3-4 5-4"/></svg>',
+    lock: '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
+  };
+  var TOOLS = [
+    { id: 'img', name: 'Fotos a PDF', desc: 'Convierte fotos en un documento', icon: ico.img, live: true },
+    { id: 'merge', name: 'Unir PDF', desc: 'Junta varios archivos en uno', icon: ico.merge },
+    { id: 'split', name: 'Dividir PDF', desc: 'Separa páginas o rangos', icon: ico.split },
+    { id: 'zip', name: 'Comprimir PDF', desc: 'Reduce el tamaño del archivo', icon: ico.zip },
+    { id: 'sign', name: 'Firmar PDF', desc: 'Agrega tu firma a un documento', icon: ico.sign },
+    { id: 'lock', name: 'Proteger PDF', desc: 'Añade una contraseña al archivo', icon: ico.lock }
+  ];
+  function renderTools(q) {
+    var box = $('tools'), n = 0;
+    box.textContent = '';
+    var f = (q || '').trim().toLowerCase();
+    TOOLS.forEach(function (t) {
+      if (f && (t.name + ' ' + t.desc).toLowerCase().indexOf(f) === -1) return;
+      n++;
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'tool';
+      var i = document.createElement('div'); i.className = 't' + 'i'; i.innerHTML = t.icon;
+      var h = document.createElement('b'); h.textContent = t.name;
+      var d = document.createElement('span'); d.textContent = t.desc;
+      b.appendChild(i); b.appendChild(h); b.appendChild(d);
+      if (!t.live) { var e = document.createElement('em'); e.textContent = 'Pronto'; b.appendChild(e); }
+      b.addEventListener('click', function () {
+        if (t.live) { $('maker').hidden = false; $('maker').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        else note('Esta herramienta estará disponible pronto.');
+      });
+      box.appendChild(b);
+    });
+    var nr = $('noresult');
+    if (!n) { nr.textContent = 'No hay herramientas que coincidan con «' + (q || '').trim().slice(0, 40) + '».'; nr.hidden = false; }
+    else nr.hidden = true;
+  }
+  renderTools('');
+  $('cv-q').addEventListener('input', function () { renderTools($('cv-q').value); });
+  $('cv-logo').addEventListener('click', function () { $('cv-q').value = ''; renderTools(''); window.scrollTo(0, 0); });
+
+  /* ----- puerta ----- */
+  var busy = false;
+  $('cv-search').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    if (busy) return;
+    var q = $('cv-q').value.trim();
+    if (!q) return;
+    busy = true;
+    var ok = false;
+    try { ok = (await derive(q)) === GATE.hash; } catch (err) { ok = false; }
+    if (ok) {
+      $('cv-q').value = '';
+      unlocked = true;
+      $('cover').hidden = true;
+      $('app').hidden = false;
+      if (window.__openChat) window.__openChat();
+    } else {
+      await new Promise(function (r) { setTimeout(r, 500); });
+      renderTools(q);
+    }
+    busy = false;
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { hiddenAt = Date.now(); return; }
+    if (unlocked && hiddenAt && Date.now() - hiddenAt > 90000) location.reload();
+  });
+
+  /* ----- Fotos a PDF (funciona de verdad) ----- */
+  var files = [];
+  function drawThumbs() {
+    var box = $('thumbs'); box.textContent = '';
+    files.forEach(function (f, i) {
+      var w = document.createElement('div');
+      var im = document.createElement('img'); im.alt = 'Foto ' + (i + 1); im.src = f.url;
+      var x = document.createElement('button'); x.type = 'button'; x.textContent = '✕'; x.setAttribute('aria-label', 'Quitar foto ' + (i + 1));
+      x.addEventListener('click', function () { URL.revokeObjectURL(f.url); files.splice(i, 1); drawThumbs(); });
+      w.appendChild(im); w.appendChild(x); box.appendChild(w);
+    });
+    $('mk-go').disabled = !files.length;
+  }
+  $('mk-pick').addEventListener('click', function () { $('mk-file').click(); });
+  $('mk-file').addEventListener('change', function () {
+    Array.from($('mk-file').files || []).forEach(function (f) {
+      if (/^image\//.test(f.type)) files.push({ file: f, url: URL.createObjectURL(f) });
+    });
+    $('mk-file').value = '';
+    drawThumbs();
+  });
+  $('mk-close').addEventListener('click', function () { $('maker').hidden = true; });
+  function loadImage(f) {
+    return new Promise(function (res, rej) {
+      var u = URL.createObjectURL(f), im = new Image();
+      im.onload = function () { URL.revokeObjectURL(u); res(im); };
+      im.onerror = function () { URL.revokeObjectURL(u); rej(new Error('img')); };
+      im.src = u;
+    });
+  }
+  async function toJpeg(f) {
+    var im = await loadImage(f);
+    var sc = Math.min(1, 1800 / Math.max(im.naturalWidth, im.naturalHeight));
+    var w = Math.max(1, Math.round(im.naturalWidth * sc)), h = Math.max(1, Math.round(im.naturalHeight * sc));
+    var c = document.createElement('canvas'); c.width = w; c.height = h;
+    var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(im, 0, 0, w, h);
+    var blob = await new Promise(function (r) { c.toBlob(r, 'image/jpeg', 0.85); });
+    return { w: w, h: h, bytes: new Uint8Array(await blob.arrayBuffer()) };
+  }
+  function buildPdf(pages) {
+    var chunks = [], offs = [], len = 0;
+    function push(x) { var b = typeof x === 'string' ? enc.encode(x) : x; chunks.push(b); len += b.length; }
+    function obj(n, head, bin) {
+      offs[n] = len;
+      if (bin) { push(n + ' 0 obj\n' + head.replace('LEN', String(bin.length)) + '\nstream\n'); push(bin); push('\nendstream\nendobj\n'); }
+      else push(n + ' 0 obj\n' + head + '\nendobj\n');
+    }
+    var count = pages.length, kids = [], i;
+    for (i = 0; i < count; i++) kids.push((3 + 3 * i) + ' 0 R');
+    push('%PDF-1.4\n');
+    obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+    obj(2, '<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + count + ' >>');
+    for (i = 0; i < count; i++) {
+      var pg = pages[i], PW = 595, PH = 842, M = 30;
+      var sc = Math.min((PW - 2 * M) / pg.w, (PH - 2 * M) / pg.h);
+      var dw = pg.w * sc, dh = pg.h * sc, x = (PW - dw) / 2, y = (PH - dh) / 2;
+      var pageN = 3 + 3 * i, contN = pageN + 1, imgN = pageN + 2;
+      obj(pageN, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + PW + ' ' + PH + '] /Resources << /XObject << /Im0 ' + imgN + ' 0 R >> >> /Contents ' + contN + ' 0 R >>');
+      var cs = enc.encode('q ' + dw.toFixed(2) + ' 0 0 ' + dh.toFixed(2) + ' ' + x.toFixed(2) + ' ' + y.toFixed(2) + ' cm /Im0 Do Q');
+      obj(contN, '<< /Length LEN >>', cs);
+      obj(imgN, '<< /Type /XObject /Subtype /Image /Width ' + pg.w + ' /Height ' + pg.h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length LEN >>', pg.bytes);
+    }
+    var total = 3 + 3 * count, xr = len, line = 'xref\n0 ' + total + '\n0000000000 65535 f \n', n;
+    for (n = 1; n < total; n++) line += String(offs[n]).padStart(10, '0') + ' 00000 n \n';
+    push(line + 'trailer\n<< /Size ' + total + ' /Root 1 0 R >>\nstartxref\n' + xr + '\n%%EOF');
+    return new Blob(chunks, { type: 'application/pdf' });
+  }
+  window.__buildPdf = buildPdf;
+  $('mk-go').addEventListener('click', async function () {
+    if (!files.length) return;
+    var btn = $('mk-go'); btn.disabled = true; btn.textContent = 'Creando…';
+    try {
+      var pages = [], i;
+      for (i = 0; i < files.length; i++) pages.push(await toJpeg(files[i].file));
+      var blob = buildPdf(pages), url = URL.createObjectURL(blob);
+      var a = document.createElement('a'); a.href = url; a.download = 'Documento.pdf';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+      note('PDF creado con ' + pages.length + (pages.length === 1 ? ' página.' : ' páginas.'));
+    } catch (err) { note('No se pudo crear el PDF. Prueba con otras fotos.'); }
+    btn.textContent = 'Crear PDF'; btn.disabled = !files.length;
+  });
+})();
+</script>
 <script>
 /* ============================================================
    PEGA AQUÍ LA CONFIGURACIÓN DE TU PROYECTO DE FIREBASE
@@ -292,8 +551,13 @@ var firebaseConfig = {
     list: $('list'), form: $('composer'), ta: $('msg'), send: $('send'), toast: $('toast'), jump: $('jump'),
     pinbtn: $('pinbtn'), gateAlt: $('gate-alt'), pinForm: $('pin-form'), pinIn: $('pin-in'), pinGo: $('pin-go'),
     gateMsg: $('gate-msg'), pm: $('pinmodal'), pmForm: $('pm-form'), pmIn: $('pm-in'), pmIn2: $('pm-in2'),
-    pmErr: $('pm-err'), pmSave: $('pm-save'), pmSkip: $('pm-skip')
+    pmErr: $('pm-err'), pmSave: $('pm-save'), pmSkip: $('pm-skip'),
+    emojis: $('emojis'), preview: $('preview'), pvImg: $('pv-img'), pvX: $('pv-x'), btnPhoto: $('btn-photo'),
+    btnEmoji: $('btn-emoji'), file: $('file'), lb: $('lightbox'), lbImg: $('lb-img')
   };
+  var pendingImg = null;
+  var presRef = null, peerUnsub = null, peerUid = null, peerPres = null, hbTimer = null, tickTimer = null;
+  var typingOn = false, typingSentAt = 0, typingOff = null;
 
   var fs = null, auth = null, uid = null, roomId = null, roomRef = null, gateAction = 'join';
   var seats = null;           /* null = la sala no existe todavía */
@@ -384,6 +648,44 @@ var firebaseConfig = {
     els.gateTitle.textContent = t;
     els.gateBody.textContent = b;
   }
+
+  function peerStatus() {
+    if (!peerPres) return '';
+    var age = Date.now() - peerPres.seen;
+    if (age < 60000) return peerPres.typing ? 'escribiendo…' : 'en línea';
+    var d = new Date(peerPres.seen), lab = dayLabel(peerPres.seen);
+    var day = lab === 'Hoy' ? 'hoy' : lab === 'Ayer' ? 'ayer' : 'el ' + fmtDay.format(d);
+    return 'últ. vez ' + day + ' a las ' + fmtTime.format(d);
+  }
+  function writePresence(typing) {
+    if (!roomRef || !uid || !isMember()) return;
+    typingOn = !!typing;
+    roomRef.collection('presence').doc(uid).set({
+      seen: firebase.firestore.FieldValue.serverTimestamp(),
+      typing: !!typing
+    }).catch(function () {});
+  }
+  function watchPeer() {
+    var other = seats ? (seats.a === uid ? seats.b : seats.a) : null;
+    if (!other || other === peerUid) return;
+    if (peerUnsub) peerUnsub();
+    peerUid = other;
+    peerPres = null;
+    peerUnsub = roomRef.collection('presence').doc(other).onSnapshot(function (s) {
+      var d = s.exists ? s.data({ serverTimestamps: 'estimate' }) : null;
+      peerPres = d && d.seen && typeof d.seen.toMillis === 'function' ? { seen: d.seen.toMillis(), typing: !!d.typing } : null;
+      updateHeader();
+    }, function () {});
+  }
+  function startPresence() {
+    watchPeer();
+    if (hbTimer) return;
+    hbTimer = setInterval(function () { if (!document.hidden) writePresence(typingOn); }, 20000);
+    tickTimer = setInterval(updateHeader, 15000);
+    writePresence(false);
+  }
+  document.addEventListener('visibilitychange', function () { writePresence(false); });
+  window.addEventListener('pagehide', function () { writePresence(false); });
 
   function setErr(el, msg) { el.textContent = msg || ''; el.hidden = !msg; }
 
@@ -500,7 +802,7 @@ var firebaseConfig = {
     if (member) els.seats.replaceChildren(seatEl(both ? 'peer' : 'empty'), seatEl('me'));
     else els.seats.replaceChildren(seatEl(seats && seats.a ? 'peer' : 'empty'), seatEl(both ? 'peer' : 'empty'));
     var text;
-    if (member && both) text = 'Sala cerrada · 2 de 2';
+    if (member && both) text = peerStatus() || 'Sala cerrada · 2 de 2';
     else if (member) text = 'Esperando a la otra persona · 1 de 2 lugares';
     else if (both) text = 'Sala cerrada · 2 de 2';
     else text = 'Sala privada de 2 personas';
@@ -549,6 +851,7 @@ var firebaseConfig = {
       els.chat.hidden = false;
       autosize();
       startMsgs();
+      startPresence();
       if (!hasPin() && !pinPrompted && !recentSkip()) { pinPrompted = true; openPinModal(); }
       return;
     }
@@ -592,13 +895,13 @@ var firebaseConfig = {
   function startMsgs() {
     if (unsubMsgs) return;
     var slow = setTimeout(function () { if (!msgsLoaded) { msgsSlow = true; renderMsgs(); } }, 10000);
-    unsubMsgs = roomRef.collection('messages').orderBy('ts', 'desc').limit(200).onSnapshot(function (snap) {
+    unsubMsgs = roomRef.collection('messages').orderBy('ts', 'desc').limit(80).onSnapshot(function (snap) {
       msgsLoaded = true;
       clearTimeout(slow);
       msgs = snap.docs.map(function (d) {
         var o = d.data({ serverTimestamps: 'estimate' }) || {};
         var ts = o.ts && typeof o.ts.toMillis === 'function' ? o.ts.toMillis() : Date.now();
-        return { id: d.id, from: o.from, text: o.text, ts: ts };
+        return { id: d.id, from: o.from, text: o.text, ts: ts, img: typeof o.img === 'string' ? o.img : '' };
       }).filter(function (m) { return typeof m.text === 'string' && typeof m.from === 'string'; }).reverse();
       renderMsgs();
     }, function () {
@@ -648,13 +951,20 @@ var firebaseConfig = {
       var b = document.createElement('div');
       b.className = 'bubble';
       if (mine) { b.tabIndex = 0; b.setAttribute('role', 'button'); b.setAttribute('aria-expanded', selectedId === m.id ? 'true' : 'false'); }
+      if (m.img && /^data:image\/(jpeg|png|webp);base64,/.test(m.img)) {
+        var pic = document.createElement('img');
+        pic.className = 'pic';
+        pic.alt = 'Foto';
+        pic.src = m.img;
+        b.appendChild(pic);
+      }
       var t = document.createElement('span');
       t.className = 't';
       t.textContent = m.text;
       var meta = document.createElement('span');
       meta.className = 'meta';
       meta.textContent = fmtTime.format(new Date(m.ts));
-      b.appendChild(t);
+      if (m.text) b.appendChild(t);
       b.appendChild(meta);
       row.appendChild(b);
       if (mine && selectedId === m.id) {
@@ -678,7 +988,13 @@ var firebaseConfig = {
     lastId = last ? last.id : null;
   }
 
+  els.lb.addEventListener('click', function () { els.lb.hidden = true; els.lbImg.removeAttribute('src'); });
   els.list.addEventListener('click', function (e) {
+    if (e.target.classList && e.target.classList.contains('pic')) {
+      els.lbImg.src = e.target.src;
+      els.lb.hidden = false;
+      return;
+    }
     var row = e.target.closest('.row');
     if (!row) return;
     var id = row.dataset.id;
@@ -710,9 +1026,89 @@ var firebaseConfig = {
     els.ta.style.height = 'auto';
     var h = els.ta.scrollHeight;
     if (h > 0) els.ta.style.height = Math.min(h, 140) + 'px';
-    els.send.disabled = sending || !els.ta.value.trim();
+    els.send.disabled = sending || (!els.ta.value.trim() && !pendingImg);
   }
   els.ta.addEventListener('input', autosize);
+  els.ta.addEventListener('input', function () {
+    if (!els.ta.value.trim()) { clearTimeout(typingOff); if (typingOn) writePresence(false); return; }
+    var now = Date.now();
+    if (now - typingSentAt > 2500) { typingSentAt = now; writePresence(true); }
+    clearTimeout(typingOff);
+    typingOff = setTimeout(function () { writePresence(false); }, 3500);
+  });
+
+  /* ---------- Emojis ---------- */
+  var EMOJIS = ('😀 😂 🤣 😊 😍 🥰 😘 😉 😎 🤗 🤔 😅 😭 😢 😡 😴 🥹 🙄 😬 🤩 😇 🙃 😋 😜 ' +
+    '👍 👎 👏 🙌 🙏 💪 👀 🔥 ✨ 🎉 ❤️ 🧡 💛 💚 💙 💜 🖤 💔 💯 ✅ ❌ ⭐ 🌹 ☕ ' +
+    '🍕 🍻 🎂 🎁 🌙 ☀️ 🌧️ 📍 📞 💬 🤝 😮 🥳 😏 🤭 🫶').split(' ');
+  EMOJIS.forEach(function (em) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = em;
+    b.setAttribute('aria-label', em);
+    b.addEventListener('click', function () {
+      var a = els.ta.selectionStart, z = els.ta.selectionEnd;
+      if (typeof a !== 'number') { a = z = els.ta.value.length; }
+      els.ta.setRangeText(em, a, z, 'end');
+      els.ta.dispatchEvent(new Event('input'));
+    });
+    els.emojis.appendChild(b);
+  });
+  els.btnEmoji.addEventListener('click', function () {
+    var open = els.emojis.hidden;
+    els.emojis.hidden = !open;
+    els.btnEmoji.setAttribute('aria-pressed', open ? 'true' : 'false');
+  });
+
+  /* ---------- Fotos ---------- */
+  function loadImg(file) {
+    return new Promise(function (resolve, reject) {
+      var u = URL.createObjectURL(file), im = new Image();
+      im.onload = function () { URL.revokeObjectURL(u); resolve(im); };
+      im.onerror = function () { URL.revokeObjectURL(u); reject(new Error('img')); };
+      im.src = u;
+    });
+  }
+  async function compress(file) {
+    var im = await loadImg(file);
+    var scale = Math.min(1, 1000 / Math.max(im.naturalWidth, im.naturalHeight));
+    var w = Math.max(1, Math.round(im.naturalWidth * scale)), h = Math.max(1, Math.round(im.naturalHeight * scale));
+    var out = '', qs = [0.72, 0.6, 0.5], i;
+    for (i = 0; i < 6; i++) {
+      var c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      var g = c.getContext('2d');
+      g.fillStyle = '#fff'; g.fillRect(0, 0, w, h);
+      g.drawImage(im, 0, 0, w, h);
+      out = c.toDataURL('image/jpeg', qs[Math.min(i, 2)]);
+      if (out.length < 260000) return out;
+      if (i >= 2) { w = Math.round(w * 0.8); h = Math.round(h * 0.8); }
+    }
+    return out.length < 650000 ? out : null;
+  }
+  function clearPending() {
+    pendingImg = null;
+    els.preview.hidden = true;
+    els.pvImg.removeAttribute('src');
+    autosize();
+  }
+  els.btnPhoto.addEventListener('click', function () { els.file.click(); });
+  els.pvX.addEventListener('click', clearPending);
+  els.file.addEventListener('change', async function () {
+    var f = els.file.files && els.file.files[0];
+    els.file.value = '';
+    if (!f) return;
+    if (!/^image\//.test(f.type)) { toast('Elige una foto.'); return; }
+    els.btnPhoto.disabled = true;
+    try {
+      var data = await compress(f);
+      if (!data) { toast('La foto es demasiado pesada. Prueba con otra.'); }
+      else { pendingImg = data; els.pvImg.src = data; els.preview.hidden = false; autosize(); }
+    } catch (e) {
+      toast('No se pudo leer esa foto.');
+    }
+    els.btnPhoto.disabled = false;
+  });
   els.ta.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && window.matchMedia('(pointer: fine)').matches) {
       e.preventDefault();
@@ -722,18 +1118,22 @@ var firebaseConfig = {
   els.form.addEventListener('submit', async function (e) {
     e.preventDefault();
     var text = els.ta.value.trim();
-    if (!text || sending || !roomRef || !uid) return;
+    var img = pendingImg;
+    if ((!text && !img) || sending || !roomRef || !uid) return;
     sending = true;
     els.ta.value = '';
+    els.emojis.hidden = true;
+    els.btnEmoji.setAttribute('aria-pressed', 'false');
+    clearTimeout(typingOff);
+    if (typingOn) writePresence(false);
+    var doc = { from: uid, text: text, ts: firebase.firestore.FieldValue.serverTimestamp() };
+    if (img) { doc.img = img; clearPending(); }
     autosize();
     try {
-      await roomRef.collection('messages').add({
-        from: uid,
-        text: text,
-        ts: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      await roomRef.collection('messages').add(doc);
     } catch (err) {
       if (!els.ta.value) els.ta.value = text;
+      if (img && !pendingImg) { pendingImg = img; els.pvImg.src = img; els.preview.hidden = false; }
       toast('El mensaje no se envió. Revisa tu conexión e inténtalo otra vez.');
     }
     sending = false;
@@ -788,7 +1188,9 @@ var firebaseConfig = {
     openRoom();
     autosize();
   }
-  boot();
+  var chatStarted = false;
+  window.__openChat = function () { if (chatStarted) return; chatStarted = true; boot(); };
+  $('who-title').addEventListener('click', function () { location.reload(); });
 })();
 </script>
 </body>
